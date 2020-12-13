@@ -62,15 +62,15 @@ Board::Board(){
 
 }
 
-void Board::print_current_board(int i, int j, int round){
+void Board::print_current_board(int i, int j, int round, double duration){
 
     int orb_num;
     char symbol;
-
     ////// Print out the current state of the board //////
-    system(CLEAR);
+    // system(CLEAR);
     cout << "Round: " << round << endl;
     cout << "Place orb on (" << i << ", " << j << ")" << endl;
+    cout << "cost time " << duration << endl;
     cout << "=============================================================" << endl;
     for(int i = 0; i < ROW; i++){
         for(int j = 0; j < COL; j++){

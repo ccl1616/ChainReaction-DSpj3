@@ -66,7 +66,7 @@ class Board{
         char get_cell_color(int i, int j);
 
         bool place_orb(int i, int j, Player* player);      // Use this function to place a orb into a cell
-        void print_current_board(int i, int j, int round); // Print out the current state of the hole board
+        void print_current_board(int i, int j, int round, double duration); // Print out the current state of the hole board
 
         bool win_the_game(Player player);                  // The function that is used to check wether the player wins the game after his/her placemnet operation
 };
