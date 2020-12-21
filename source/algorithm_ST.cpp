@@ -25,6 +25,43 @@ using namespace std;
  * 4. The function that print out the current board statement
 *************************************************************************/
 
+/*
+container:
+-> use one dimentional method to record (x,y)
+    a local board
+    next_valid_step -- an array that save next_valid_steps, record size
+    ans_array -- an array that saved final point , record size
+
+function:
+    put_disk
+    abprune
+    heuristic
+    min, max
+
+abprune(board, depth, alpha, beta, player)
+{
+    if end, return heuristic
+    if maximizer{
+        find out next_valid_steps
+        for(all next_valid_steps){
+            clone a now board
+            put it on
+            int eval = abprune( next,depth-1,alpha,beta); 
+            maxeval = max(maxeval,eval);
+            if(depth == MaxDepth)
+                h_map.insert(pair<int,Point>(eval,i)); //save into ans_array
+            
+            alpha = max(alpha,eval);
+            if(beta <= alpha)
+                break;
+        }
+    }
+    else{
+        do same thing for minimizer
+    }
+}
+
+*/
 
 void algorithm_A(Board board, Player player, int index[]){
 
