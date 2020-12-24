@@ -21,7 +21,7 @@ using namespace std;
  * 
  * 1. The function that return the number of orbs in cell(row, col)
  * 2. The function that return the orb capacity of the cell(row, col)
- * 3. The function that return the color fo the cell(row, col)
+ * 3. The function that return the color of the cell(row, col)
  * 4. The function that print out the current board statement
 *************************************************************************/
 
@@ -62,6 +62,10 @@ abprune(board, depth, alpha, beta, player)
 }
 
 */
+bool check_board(Board my, Board ori);
+int maxval = 0;
+int id = -1;
+bool checker = false;
 
 void algorithm_A(Board board, Player player, int index[]){
 
@@ -69,14 +73,47 @@ void algorithm_A(Board board, Player player, int index[]){
     srand(time(NULL)*time(NULL));
     int row, col;
     int color = player.get_color();
+    Board myboard = board;
     
     while(1){
         row = rand() % 5;
         col = rand() % 6;
-        if(board.get_cell_color(row, col) == color || board.get_cell_color(row, col) == 'w') break;
+        //if(board.get_cell_color(row, col) == color || board.get_cell_color(row, col) == 'w') break;
+        if(myboard.get_cell_color(row, col) == color) break;
+        else if(myboard.get_cell_color(row, col) == 'w') break;
     }
-
+    for(int i = 0; i < 30; i ++){
+        int r = i / 6;
+        int c = i % 6;
+        if(myboard.get_cell_color(r, c) == color) {
+            if(myboard.get_orbs_num(r,c) > maxval ){
+                maxval = myboard.get_orbs_num(r,c);
+                id = i;
+            }
+        }
+    }
+    if(id != -1 && myboard.get_cell_color(id/6, id%6) == color ) {
+        checker = 1; 
+        row = id / 6;
+        col = id % 6;
+    }
+    
     index[0] = row;
     index[1] = col;
-    
+    cout << check_board(myboard,board) << " checker:" << checker << ' ' << myboard.get_cell_color(row, col) << endl;
+}
+
+bool check_board(Board my, Board ori)
+{
+    bool ans = true;
+    for(int i = 0; i < 5; i ++){
+        for(int j = 0; j < 6; j ++){
+            if( !(my.get_orbs_num(i,j) == ori.get_orbs_num(i,j)) ) ans = false; 
+            else if( !(my.get_capacity(i,j) == ori.get_capacity(i,j)) ) ans = false;
+            else if( !(my.get_cell_color(i,j) == ori.get_cell_color(i,j)) ) ans = false;
+
+            if(!ans) return false;
+        }
+    }
+    return true;
 }

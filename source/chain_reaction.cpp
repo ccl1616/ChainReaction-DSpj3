@@ -18,7 +18,7 @@ int main(){
     int round = 1;
     int index[2];
 
-    FILE *tempo = freopen("log.txt","w",stdout); //me
+    //FILE *tempo = freopen("log.txt","w",stdout); //me
 
     while(1){
 
@@ -28,7 +28,10 @@ int main(){
         timearr[1] = time(NULL);
         board.place_orb(index[0], index[1], &red_player);
         
-        if(rules_violation(red_player)) return 0;
+        if(rules_violation(red_player)) {
+            cout << index[0] << "," << index[1] << endl;
+            return 0;
+        }
         double duration = (double) difftime(timearr[0],timearr[1]);
         board.print_current_board(index[0], index[1], round, duration);
         round++;
@@ -56,6 +59,6 @@ int main(){
 
         first_two_step = false;
     }
-    fclose(tempo);
+    //fclose(tempo);
     return 0;
 } 
