@@ -62,8 +62,7 @@ abprune(board, depth, alpha, beta, player)
 }
 
 */
-int maxval = 0;
-int second_maxval = 0;
+
 int id = -1;
 int ans[4]; //[0] = max id, [1] = max val; [2] = second id, [3] = second maxval
 bool checker = false;
@@ -80,6 +79,7 @@ void algorithm_A(Board board, Player player, int index[]){
     int color = player.get_color();
     Board myboard = board;
     
+    // random
     while(1){
         row = rand() % 5;
         col = rand() % 6;
@@ -87,24 +87,33 @@ void algorithm_A(Board board, Player player, int index[]){
         if(myboard.get_cell_color(row, col) == color) break;
         else if(myboard.get_cell_color(row, col) == 'w') break;
     }
-    bool next[30];
-    get_valid_spots(myboard, color, next);
 
+    // algo
+    bool next[30];
+    ans[0] = ans[2] = -1;
+    get_valid_spots(myboard, color, next);
     for(int i = 0; i < 30; i ++){
         int r = i / 6;
         int c = i % 6;
         if(next[i]){
-            if(myboard.get_orbs_num(r,c) > maxval ){
-                second_maxval = maxval;
-                maxval = myboard.get_orbs_num(r,c);
-                id = i;
+            if(myboard.get_orbs_num(r,c) > ans[1] ){
+                ans[3] = ans[1];
+                ans[2] = ans[0];
+                ans[1] = myboard.get_orbs_num(r,c);
+                ans[0] = i;
             }
         }
     }
+    id = ans[0];
     if(id != -1 && myboard.get_cell_color(id/6, id%6) == color ) {
         checker = 1; 
         row = id / 6;
         col = id % 6;
+    }
+    else if(ans[2] != -1 && myboard.get_cell_color(ans[2]/6, ans[2]%6) == color ){
+        checker = 1; 
+        row = ans[2] / 6;
+        col = ans[2] % 6;
     }
     
     index[0] = row;
