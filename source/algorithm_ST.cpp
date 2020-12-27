@@ -4,7 +4,7 @@
 #include "../include/algorithm.h"
 
 using namespace std;
-int MaxDepth = 7;
+int MaxDepth = 4;
 /******************************************************
  * In your algorithm, you can just use the the funcitons
  * listed by TA to get the board information.(functions 
@@ -44,12 +44,14 @@ int ans[4]; //[0] = max id, [1] = max val; [2] = second id, [3] = second maxval
 bool checker = false;
 int heuristic_val[30]; // save heuristic value
 int local_player_color;
+Board original;
 
 bool check_board(Board my, Board ori); // check the wheather the board is identical or not
 void get_valid_spots(Board myboard, int color, bool next[30]); // get next valid spot
 int abprune(Board curnode, int depth, int alpha, int beta, int color);
 int get_next_player(int color);
 int heuristic(Board curnode);
+bool first_step(Board curnode);
 
 void algorithm_A(Board board, Player player, int index[]){
 
@@ -58,6 +60,7 @@ void algorithm_A(Board board, Player player, int index[]){
     int row, col;
     int color = player.get_color();
     local_player_color = color;
+    original = board;
     
     // random
     while(1){
@@ -70,31 +73,50 @@ void algorithm_A(Board board, Player player, int index[]){
 
     // algo
     Board myboard = board;
-    bool next[30];
-    ans[0] = ans[2] = -1;
-    get_valid_spots(myboard, color, next);
-    for(int i = 0; i < 30; i ++){
-        int r = i / 6;
-        int c = i % 6;
-        if(next[i]){
-            if(myboard.get_orbs_num(r,c) > ans[1] ){
-                ans[3] = ans[1];
-                ans[2] = ans[0];
-                ans[1] = myboard.get_orbs_num(r,c);
-                ans[0] = i;
+    if(!first_step(board)){
+        bool next[30];
+        ans[0] = ans[2] = -1;
+        get_valid_spots(myboard, color, next);
+
+        // general solution, no further think
+        for(int i = 0; i < 30; i ++){
+            int r = i / 6;
+            int c = i % 6;
+            if(next[i]){
+                if(myboard.get_orbs_num(r,c) > ans[1] ){
+                    ans[3] = ans[1];
+                    ans[2] = ans[0];
+                    ans[1] = myboard.get_orbs_num(r,c);
+                    ans[0] = i;
+                }
             }
         }
-    }
-    id = ans[0];
-    if(id != -1 && myboard.get_cell_color(id/6, id%6) == color ) {
-        checker = 1; 
-        row = id / 6;
-        col = id % 6;
-    }
-    else if(ans[2] != -1 && myboard.get_cell_color(ans[2]/6, ans[2]%6) == color ){
-        checker = 1; 
-        row = ans[2] / 6;
-        col = ans[2] % 6;
+        id = ans[0];
+        if(id != -1 && myboard.get_cell_color(id/6, id%6) == color ) {
+            checker = 1; 
+            row = id / 6;
+            col = id % 6;
+        }
+        else if(ans[2] != -1 && myboard.get_cell_color(ans[2]/6, ans[2]%6) == color ){
+            checker = 1; 
+            row = ans[2] / 6;
+            col = ans[2] % 6;
+        }
+
+        // abprune solution
+        
+        for(int i = 1; i <= 9; i+= 2){
+            MaxDepth = i;
+            int cur_H = abprune(myboard, MaxDepth, INT32_MIN, INT32_MAX, color);
+            for(int j = 0; i < 30; j ++){
+                if(heuristic_val[j] == cur_H){
+                    if(myboard.get_cell_color(j/6, j%6) == color){
+                        row = j / 6;
+                        row = j % 6;
+                    }
+                }
+            }
+        }
     }
     
     index[0] = row;
@@ -135,9 +157,11 @@ int get_next_player(int color){
 }
 
 int abprune(Board curnode, int depth, int alpha, int beta, int color){
+    cout << "hi abprune\n";
     bool maximizer = (color == local_player_color );
     
     if(depth == 0 || curnode.win_the_game( Player(color) )){
+        cout << "hi call H\n";
         return heuristic(curnode);
     }
     if(maximizer){
@@ -207,10 +231,21 @@ int heuristic(Board curnode)
         int c = i % 6;
         int cell_color = curnode.get_cell_color(r,c);
         if(cell_color != 'w'){
-            if(cell_color == local_player_color)
+            if(cell_color == local_player_color){
                 H += curnode.get_orbs_num(r,c);
+            }
             else H -= curnode.get_orbs_num(r,c);
         }
     }
     return H;
+}
+
+bool first_step(Board curnode){
+    for(int i = 0; i < 30; i ++){
+        int r = i / 6;
+        int c = i % 6;
+        int cell_color = curnode.get_cell_color(r,c);
+        if(cell_color != 'w') return false;
+    }
+    return true;
 }
