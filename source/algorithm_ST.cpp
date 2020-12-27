@@ -62,10 +62,15 @@ abprune(board, depth, alpha, beta, player)
 }
 
 */
-bool check_board(Board my, Board ori);
 int maxval = 0;
+int second_maxval = 0;
 int id = -1;
+int ans[4]; //[0] = max id, [1] = max val; [2] = second id, [3] = second maxval
 bool checker = false;
+int my_h_board[5][6]; // save heuristic value
+
+bool check_board(Board my, Board ori); // check the wheather the board is identical or not
+void get_valid_spots(Board myboard, int color, bool next[30]); // get next valid spot
 
 void algorithm_A(Board board, Player player, int index[]){
 
@@ -82,11 +87,15 @@ void algorithm_A(Board board, Player player, int index[]){
         if(myboard.get_cell_color(row, col) == color) break;
         else if(myboard.get_cell_color(row, col) == 'w') break;
     }
+    bool next[30];
+    get_valid_spots(myboard, color, next);
+
     for(int i = 0; i < 30; i ++){
         int r = i / 6;
         int c = i % 6;
-        if(myboard.get_cell_color(r, c) == color) {
+        if(next[i]){
             if(myboard.get_orbs_num(r,c) > maxval ){
+                second_maxval = maxval;
                 maxval = myboard.get_orbs_num(r,c);
                 id = i;
             }
@@ -100,7 +109,7 @@ void algorithm_A(Board board, Player player, int index[]){
     
     index[0] = row;
     index[1] = col;
-    cout << check_board(myboard,board) << " checker:" << checker << ' ' << myboard.get_cell_color(row, col) << endl;
+    std::cout << check_board(myboard,board) << " checker:" << checker << ' ' << myboard.get_cell_color(row, col) << endl;
 }
 
 bool check_board(Board my, Board ori)
@@ -116,4 +125,16 @@ bool check_board(Board my, Board ori)
         }
     }
     return true;
+}
+
+void get_valid_spots(Board myboard, int color, bool next[30])
+{
+    for(int i = 0; i < 30; i ++){
+        next[i] = false;
+        int r = i / 6;
+        int c = i % 6;
+        if(myboard.get_cell_color(r, c) == color || myboard.get_cell_color(r, c) == 'w') {
+            next[i] = true;
+        }
+    }
 }

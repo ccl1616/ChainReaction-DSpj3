@@ -17,8 +17,9 @@ int main(){
     bool first_two_step = true;
     int round = 1;
     int index[2];
+    bool debug = false;
 
-    //FILE *tempo = freopen("log.txt","w",stdout); //me
+    if(debug) FILE *tempo = freopen("log.txt","w",stdout); //me
 
     while(1){
 
@@ -59,6 +60,5 @@ int main(){
 
         first_two_step = false;
     }
-    //fclose(tempo);
     return 0;
 } 
