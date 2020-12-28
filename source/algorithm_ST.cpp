@@ -74,17 +74,15 @@ void algorithm_A(Board board, Player player, int index[]){
     // algo
     Board myboard = board;
     if(!first_step(myboard)){
-        ans[0] = ans[1] = ans[2] = -1;
+        ans[0] = ans[1] = -1;
         
         // general solution, no further think
         for(int i = 0; i < 30; i ++){
             int r = i / 6;
             int c = i % 6;
             if(myboard.get_cell_color(r,c) == color){
-                cout << myboard.get_orbs_num(r,c) << " at " << r << "," << c << endl;
+                // cout << myboard.get_orbs_num(r,c) << " at " << r << "," << c << endl;
                 if(myboard.get_orbs_num(r,c) > ans[1] ){
-                    ans[3] = ans[1];
-                    ans[2] = ans[0];
                     ans[1] = myboard.get_orbs_num(r,c);
                     ans[0] = i;
                 }
