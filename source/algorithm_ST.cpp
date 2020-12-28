@@ -4,7 +4,7 @@
 #include "../include/algorithm.h"
 
 using namespace std;
-int MaxDepth = 4;
+int MaxDepth = 2;
 /******************************************************
  * In your algorithm, you can just use the the funcitons
  * listed by TA to get the board information.(functions 
@@ -39,7 +39,7 @@ function:
     min, max
 */
 
-int id = -1;
+int Next[30];
 int ans[4]; //[0] = max id, [1] = max val; [2] = second id, [3] = second maxval
 bool checker = false;
 int heuristic_val[30]; // save heuristic value
@@ -47,11 +47,12 @@ int local_player_color;
 Board original;
 
 bool check_board(Board my, Board ori); // check the wheather the board is identical or not
-void get_valid_spots(Board myboard, int color, bool next[30]); // get next valid spot
+bool get_mycolor_spots(Board myboard, int color);
 int abprune(Board curnode, int depth, int alpha, int beta, int color);
 int get_next_player(int color);
 int heuristic(Board curnode);
 bool first_step(Board curnode);
+void print_next_valid(bool a[30]);
 
 void algorithm_A(Board board, Player player, int index[]){
 
@@ -67,22 +68,20 @@ void algorithm_A(Board board, Player player, int index[]){
         row = rand() % 5;
         col = rand() % 6;
         //if(board.get_cell_color(row, col) == color || board.get_cell_color(row, col) == 'w') break;
-        if(board.get_cell_color(row, col) == color) break;
-        else if(board.get_cell_color(row, col) == 'w') break;
+        if(board.get_cell_color(row, col) == 'w') break;
     }
 
     // algo
     Board myboard = board;
-    if(!first_step(board)){
-        bool next[30];
-        ans[0] = ans[2] = -1;
-        get_valid_spots(myboard, color, next);
-
+    if(!first_step(myboard)){
+        ans[0] = ans[1] = ans[2] = -1;
+        
         // general solution, no further think
         for(int i = 0; i < 30; i ++){
             int r = i / 6;
             int c = i % 6;
-            if(next[i]){
+            if(myboard.get_cell_color(r,c) == color){
+                cout << myboard.get_orbs_num(r,c) << " at " << r << "," << c << endl;
                 if(myboard.get_orbs_num(r,c) > ans[1] ){
                     ans[3] = ans[1];
                     ans[2] = ans[0];
@@ -91,24 +90,24 @@ void algorithm_A(Board board, Player player, int index[]){
                 }
             }
         }
-        id = ans[0];
-        if(id != -1 && myboard.get_cell_color(id/6, id%6) == color ) {
+        if(ans[0] != -1 && myboard.get_cell_color(ans[0]/6, ans[0]%6) == color ) {
             checker = 1; 
-            row = id / 6;
-            col = id % 6;
+            row = ans[0] / 6;
+            col = ans[0] % 6;
         }
+        /*
         else if(ans[2] != -1 && myboard.get_cell_color(ans[2]/6, ans[2]%6) == color ){
             checker = 1; 
             row = ans[2] / 6;
             col = ans[2] % 6;
-        }
-
-        // abprune solution
+        }*/
         
+        // abprune solution
+        /*
         for(int i = 1; i <= 9; i+= 2){
             MaxDepth = i;
             int cur_H = abprune(myboard, MaxDepth, INT32_MIN, INT32_MAX, color);
-            for(int j = 0; i < 30; j ++){
+            for(int j = 0; j < 30; j ++){
                 if(heuristic_val[j] == cur_H){
                     if(myboard.get_cell_color(j/6, j%6) == color){
                         row = j / 6;
@@ -116,7 +115,7 @@ void algorithm_A(Board board, Player player, int index[]){
                     }
                 }
             }
-        }
+        }*/
     }
     
     index[0] = row;
@@ -139,36 +138,39 @@ bool check_board(Board my, Board ori)
     return true;
 }
 
-void get_valid_spots(Board myboard, int color, bool next[30])
+bool get_mycolor_spots(Board myboard, int color)
 {
+    bool ans = false;
     for(int i = 0; i < 30; i ++){
-        next[i] = false;
+        Next[i] = false;
         int r = i / 6;
         int c = i % 6;
-        if(myboard.get_cell_color(r, c) == color || myboard.get_cell_color(r, c) == 'w') {
-            next[i] = true;
+        if(myboard.get_cell_color(r, c) == color) {
+            Next[i] = true;
+            ans = true;
         }
     }
+    return ans;
 }
 
 int get_next_player(int color){
     if(color == 'r') return 'b';
     else return 'r';
 }
-
+/*
 int abprune(Board curnode, int depth, int alpha, int beta, int color){
-    cout << "hi abprune\n";
+    //cout << "hi abprune\n";
     bool maximizer = (color == local_player_color );
     
     if(depth == 0 || curnode.win_the_game( Player(color) )){
-        cout << "hi call H\n";
+        //cout << "hi call H\n";
         return heuristic(curnode);
     }
+    bool next_valid_steps[30];
+    get_valid_spots(curnode, color, next_valid_steps);
+
     if(maximizer){
         int maxeval = INT32_MIN;
-        bool next_valid_steps[30];
-        get_valid_spots(curnode, color, next_valid_steps);
-
         for(int i = 0; i < 30; i ++){
             Board next = curnode;
             if(!next_valid_steps[i]) continue;
@@ -194,9 +196,6 @@ int abprune(Board curnode, int depth, int alpha, int beta, int color){
     }
     else{
         int mineval = INT32_MAX;
-        bool next_valid_steps[30];
-        get_valid_spots(curnode, color, next_valid_steps);
-
         for(int i = 0; i < 30; i ++){
             Board next = curnode;
             if(!next_valid_steps[i]) continue;
@@ -221,7 +220,8 @@ int abprune(Board curnode, int depth, int alpha, int beta, int color){
         return mineval;
     }
 
-} // end function
+} */ 
+// end function
 
 int heuristic(Board curnode)
 {
@@ -248,4 +248,15 @@ bool first_step(Board curnode){
         if(cell_color != 'w') return false;
     }
     return true;
+}
+
+void print_next_valid(bool a[30])
+{
+    cout << "print_next_valid\n";
+    for(int i = 0; i < 30; i ++){
+        if(a[i]){
+            cout << i << ",";
+        }
+    }
+    cout << endl;
 }

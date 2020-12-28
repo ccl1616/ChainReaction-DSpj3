@@ -17,7 +17,7 @@ int main(){
     bool first_two_step = true;
     int round = 1;
     int index[2];
-    bool debug = false;
+    bool debug = true;
 
     if(debug) FILE *tempo = freopen("log.txt","w",stdout); //me
 
