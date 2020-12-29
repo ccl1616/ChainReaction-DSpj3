@@ -4,7 +4,7 @@
 #include "../include/algorithm.h"
 
 using namespace std;
-int MaxDepth = 4;
+int MaxDepth = 3;
 #define ROW 5
 #define COL 6
 /******************************************************
@@ -54,7 +54,7 @@ void algorithm_A(Board board, Player player, int index[]){
     while(1){
         row = rand() % ROW;
         col = rand() % COL;
-        if(board.get_cell_color(row, col) == 'w') break;
+        if(board.get_cell_color(row, col) == color || board.get_cell_color(row, col) == 'w') break;
     }
 
     // algo

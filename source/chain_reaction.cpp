@@ -33,7 +33,11 @@ int main(){
             cout << index[0] << "," << index[1] << endl;
             return 0;
         }
-        double duration = (double) difftime(timearr[0],timearr[1]);
+        double duration = (double) difftime(timearr[1],timearr[0]);
+        if(duration > 0) {
+            cout << "Red Player time out xxxxxxxxxxxx" << endl;
+            return 0;
+        }
         board.print_current_board(index[0], index[1], round, duration);
         round++;
 
