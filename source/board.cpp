@@ -67,7 +67,7 @@ void Board::print_current_board(int i, int j, int round, double duration){
     int orb_num;
     char symbol;
     ////// Print out the current state of the board //////
-    system(CLEAR);
+    // system(CLEAR);
     char temp;
     if(round%2 == 0) temp = 'X';
     else temp = 'O';
