@@ -67,7 +67,7 @@ void Board::print_current_board(int i, int j, int round, double duration){
     int orb_num;
     char symbol;
     ////// Print out the current state of the board //////
-    // system(CLEAR);
+    system(CLEAR);
     char temp;
     if(round%2 == 0) temp = 'X';
     else temp = 'O';
@@ -127,7 +127,7 @@ void Board::print_current_board(int i, int j, int round, double duration){
 
 bool Board::place_orb(int i, int j, Player * player){
     
-    if(index_range_illegal(i, j) || !placement_illegal(*player, cells[i][j])){
+    if(!index_range_illegal(i, j) || !placement_illegal(*player, cells[i][j])){
         int temp = cells[i][j].get_orbs_num();
         temp += 1;
         cells[i][j].set_orbs_num(temp);

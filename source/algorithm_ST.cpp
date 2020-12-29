@@ -33,7 +33,7 @@ container:
     ans_array -- an array that saved final point , record size
 
 function:
-    put_disk
+    get_next_valid
     abprune
     heuristic
     min, max
@@ -47,12 +47,11 @@ int local_player_color;
 Board original;
 
 bool check_board(Board my, Board ori); // check the wheather the board is identical or not
-bool get_mycolor_spots(Board myboard, int color);
+bool first_step(Board curnode);
+
 int abprune(Board curnode, int depth, int alpha, int beta, int color);
 int get_next_player(int color);
 int heuristic(Board curnode);
-bool first_step(Board curnode);
-void print_next_valid(bool a[30]);
 
 void algorithm_A(Board board, Player player, int index[]){
 
@@ -88,32 +87,14 @@ void algorithm_A(Board board, Player player, int index[]){
                 }
             }
         }
-        if(ans[0] != -1 && myboard.get_cell_color(ans[0]/6, ans[0]%6) == color ) {
+        if(ans[0] != -1) {
             checker = 1; 
             row = ans[0] / 6;
             col = ans[0] % 6;
         }
-        /*
-        else if(ans[2] != -1 && myboard.get_cell_color(ans[2]/6, ans[2]%6) == color ){
-            checker = 1; 
-            row = ans[2] / 6;
-            col = ans[2] % 6;
-        }*/
         
         // abprune solution
-        /*
-        for(int i = 1; i <= 9; i+= 2){
-            MaxDepth = i;
-            int cur_H = abprune(myboard, MaxDepth, INT32_MIN, INT32_MAX, color);
-            for(int j = 0; j < 30; j ++){
-                if(heuristic_val[j] == cur_H){
-                    if(myboard.get_cell_color(j/6, j%6) == color){
-                        row = j / 6;
-                        row = j % 6;
-                    }
-                }
-            }
-        }*/
+        //int cur_H = abprune(myboard, MaxDepth, INT32_MIN, INT32_MAX, color);
     }
     
     index[0] = row;
@@ -136,26 +117,11 @@ bool check_board(Board my, Board ori)
     return true;
 }
 
-bool get_mycolor_spots(Board myboard, int color)
-{
-    bool ans = false;
-    for(int i = 0; i < 30; i ++){
-        Next[i] = false;
-        int r = i / 6;
-        int c = i % 6;
-        if(myboard.get_cell_color(r, c) == color) {
-            Next[i] = true;
-            ans = true;
-        }
-    }
-    return ans;
-}
-
 int get_next_player(int color){
     if(color == 'r') return 'b';
     else return 'r';
 }
-/*
+
 int abprune(Board curnode, int depth, int alpha, int beta, int color){
     //cout << "hi abprune\n";
     bool maximizer = (color == local_player_color );
@@ -165,7 +131,7 @@ int abprune(Board curnode, int depth, int alpha, int beta, int color){
         return heuristic(curnode);
     }
     bool next_valid_steps[30];
-    get_valid_spots(curnode, color, next_valid_steps);
+    //get_valid_spots(curnode, color, next_valid_steps);
 
     if(maximizer){
         int maxeval = INT32_MIN;
@@ -218,7 +184,7 @@ int abprune(Board curnode, int depth, int alpha, int beta, int color){
         return mineval;
     }
 
-} */ 
+} 
 // end function
 
 int heuristic(Board curnode)
@@ -246,15 +212,4 @@ bool first_step(Board curnode){
         if(cell_color != 'w') return false;
     }
     return true;
-}
-
-void print_next_valid(bool a[30])
-{
-    cout << "print_next_valid\n";
-    for(int i = 0; i < 30; i ++){
-        if(a[i]){
-            cout << i << ",";
-        }
-    }
-    cout << endl;
 }
