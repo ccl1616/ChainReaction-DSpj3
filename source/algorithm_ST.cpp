@@ -52,9 +52,8 @@ void algorithm_A(Board board, Player player, int index[]){
     
     // random
     while(1){
-        row = rand() % 5;
-        col = rand() % 6;
-        //if(board.get_cell_color(row, col) == color || board.get_cell_color(row, col) == 'w') break;
+        row = rand() % ROW;
+        col = rand() % COL;
         if(board.get_cell_color(row, col) == 'w') break;
     }
 
@@ -75,15 +74,15 @@ void algorithm_A(Board board, Player player, int index[]){
                 }
             }
         }
-        if(ans[0] != -1) {
-            row = ans[0] / 6;
-            col = ans[0] % 6;
+        if(ans[0] != -1 && (myboard.get_cell_color(ans[0]/COL, ans[0]%COL) == color || myboard.get_cell_color(ans[0]/COL, ans[0]%COL) == 'w') ) {
+            row = ans[0] / COL;
+            col = ans[0] % COL;
         }
         
         // abprune solution
         int cur_H = abprune(myboard, MaxDepth, INT32_MIN, INT32_MAX, color);
         for(int i = 0; i < 30; i ++){
-            if(cur_H == heuristic_val[i]){
+            if(cur_H == heuristic_val[i] && (myboard.get_cell_color(i/COL, i%COL) == color || myboard.get_cell_color(i/COL, i%COL) == 'w')){
                 row = i / COL;
                 col = i % COL;
                 checker = true;
@@ -190,8 +189,8 @@ int heuristic(Board curnode)
 {
     int H = 0; // H for heuristic val
     for(int i = 0; i < 30; i ++){
-        int r = i / 6;
-        int c = i % 6;
+        int r = i / COL;
+        int c = i % COL;
         int cell_color = curnode.get_cell_color(r,c);
         if(cell_color != 'w'){
             if(cell_color == local_player_color)
