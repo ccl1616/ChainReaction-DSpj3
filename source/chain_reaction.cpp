@@ -38,9 +38,9 @@ int main(){
         }
         double duration = (double) difftime(timearr[1],timearr[0]);
         auto duration2 = chrono::duration_cast<chrono::microseconds>(stop - start); 
-        
+
+        cout << duration2.count() << endl;
         if( duration2.count() > 1000000 ) {
-            cout << duration2.count() << endl;
             cout << "Red Player timeout xxxxxxxxxxxx" << endl;
             return 0;
         }
@@ -55,6 +55,7 @@ int main(){
         //////////// Blue Player operations ////////////
         timearr[0] = time(NULL);
         algorithm_B(board, blue_player, index);
+        // std::cin >> index[0] >> index[1];
         timearr[1] = time(NULL);
         board.place_orb(index[0], index[1], &blue_player);
 
