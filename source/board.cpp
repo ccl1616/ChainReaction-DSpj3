@@ -74,9 +74,6 @@ void Board::print_current_board(int i, int j, int round, double duration){
 
     cout << "Round: " << round  << endl;
     cout << "Place " << temp <<  " on (" << i << ", " << j << ")" << endl;
-    cout << "cost time " << duration;
-    if(duration != 0) cout << " timeout\n";
-    else cout << endl;
 
     cout << "=============================================================" << endl;
     for(int i = 0; i < ROW; i++){

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <time.h>
+#include <chrono>
 #include "../include/board.h"
 #include "../include/player.h"
 #include "../include/rules.h"
@@ -24,9 +25,11 @@ int main(){
     while(1){
 
         //////////// Red Player operations ////////////
+        auto start = chrono::high_resolution_clock::now(); 
         timearr[0] = time(NULL);
         algorithm_A(board, red_player, index);
         timearr[1] = time(NULL);
+        auto stop = chrono::high_resolution_clock::now(); 
         board.place_orb(index[0], index[1], &red_player);
         
         if(rules_violation(red_player)) {
@@ -34,8 +37,11 @@ int main(){
             return 0;
         }
         double duration = (double) difftime(timearr[1],timearr[0]);
-        if(duration > 0) {
-            cout << "Red Player time out xxxxxxxxxxxx" << endl;
+        auto duration2 = chrono::duration_cast<chrono::microseconds>(stop - start); 
+        
+        if( duration2.count() > 1000000 ) {
+            cout << duration2.count() << endl;
+            cout << "Red Player timeout xxxxxxxxxxxx" << endl;
             return 0;
         }
         board.print_current_board(index[0], index[1], round, duration);

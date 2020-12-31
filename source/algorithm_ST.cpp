@@ -121,7 +121,6 @@ int abprune(Board curnode, int depth, int alpha, int beta, int color){
     bool maximizer = (color == local_player_color );
     
     if(depth == 0 || curnode.win_the_game( Player(color) )){
-        //cout << "hi call H\n";
         return heuristic(curnode);
     }
 
