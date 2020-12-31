@@ -27,7 +27,6 @@ int MaxDepth = 3;
  * 4. The function that print out the current board statement
 *************************************************************************/
 
-int Next[30];
 int ans[4]; //[0] = max id, [1] = max val; [2] = second id, [3] = second maxval
 bool checker = false;
 int heuristic_val[30]; // save heuristic value
