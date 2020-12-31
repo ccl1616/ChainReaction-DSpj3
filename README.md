@@ -5,6 +5,7 @@ TA: https://github.com/Hhhho/Chain-Reaction
 
 compile: 
 g++ chain_reaction.cpp board.cpp rules.cpp player.cpp algorithm_ST.cpp algorithm_TA.cpp
+g++ -std=c++11 chain_reaction.cpp board.cpp rules.cpp player.cpp algorithm_ST.cpp algorithm_TA.cpp
 
 player:
 O is the red player, is the first one that can take the step(odd turn).
