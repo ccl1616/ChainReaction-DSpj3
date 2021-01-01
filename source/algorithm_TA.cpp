@@ -172,15 +172,26 @@ int abprune2(Board curnode, int depth, int alpha, int beta, int color){
 int heuristic2(Board curnode)
 {
     int H = 0; // H for heuristic val
+    int max_H = 0;
+    int min_H = 0;
+    int max_occupy = 0;
+    int min_occupy = 0;
     for(int i = 0; i < 30; i ++){
         int r = i / COL;
         int c = i % COL;
         int cell_color = curnode.get_cell_color(r,c);
         if(cell_color != 'w'){
-            if(cell_color == local_player_color2 )
-                H += curnode.get_orbs_num(r,c);
-            else H -= curnode.get_orbs_num(r,c);
+            if(cell_color == local_player_color2){
+                max_H += curnode.get_orbs_num(r,c);
+                max_occupy++;
+            }
+            else {
+                min_H +=  curnode.get_orbs_num(r,c);
+                min_occupy++;
+            }
         }
     }
+    H += (max_occupy/30)*50 , H += max_H;
+    H -= (min_occupy/30)*50 , H -= min_H;
     return H;
 }
