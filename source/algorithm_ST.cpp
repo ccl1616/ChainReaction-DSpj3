@@ -58,7 +58,7 @@ void algorithm_A(Board board, Player player, int index[]){
 
     // algo
     Board myboard = board;
-    if(!first_step(myboard)){
+    if(!first_step(myboard) ){
         ans[0] = ans[1] = -1;
         
         // general solution, no further think
@@ -186,16 +186,33 @@ int abprune(Board curnode, int depth, int alpha, int beta, int color){
 int heuristic(Board curnode)
 {
     int H = 0; // H for heuristic val
+    int max_H = 0;
+    int min_H = 0;
+    int max_occupy = 0;
+    int min_occupy = 0;
     for(int i = 0; i < 30; i ++){
         int r = i / COL;
         int c = i % COL;
         int cell_color = curnode.get_cell_color(r,c);
         if(cell_color != 'w'){
-            if(cell_color == local_player_color)
-                H += curnode.get_orbs_num(r,c);
-            else H -= curnode.get_orbs_num(r,c);
+            if(cell_color == local_player_color){
+                max_H += curnode.get_orbs_num(r,c);
+                max_occupy++;
+                if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) <= 2 ){
+                    max_H += abs(curnode.get_orbs_num(r,c))*2;
+                }
+            }
+            else {
+                min_H +=  curnode.get_orbs_num(r,c);
+                min_occupy++;
+                if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) <= 2 ){
+                    min_H += abs(curnode.get_orbs_num(r,c))*2;
+                }
+            }
         }
     }
+    H += (max_occupy/30), H += max_H;
+    H -= (min_occupy/30), H -= min_H;
     return H;
 }
 

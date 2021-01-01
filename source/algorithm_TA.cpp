@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int MaxDepth2 = 2;
+int MaxDepth2 = 4;
 #define ROW 5
 #define COL 6
 int heuristic_val2[30]; // save heuristic value
@@ -14,6 +14,22 @@ bool first_step2(Board curnode);
 int abprune2(Board curnode, int depth, int alpha, int beta, int color);
 int get_next_player2(int color);
 int heuristic2(Board curnode);
+
+void algorithm_C(Board board, Player player, int index[])
+{
+    // random algo
+    srand(time(NULL)*time(NULL));
+    int row, col;
+    int color = local_player_color2 = player.get_color();
+    
+    while(1){
+        row = rand() % 5;
+        col = rand() % 6;
+        if(board.get_cell_color(row, col) == color || board.get_cell_color(row, col) == 'w') break;
+    }
+    index[0] = row;
+    index[1] = col;
+}
 
 void algorithm_B(Board board, Player player, int index[]){
     srand(time(NULL)*time(NULL));
@@ -25,6 +41,7 @@ void algorithm_B(Board board, Player player, int index[]){
         col = rand() % 6;
         if(board.get_cell_color(row, col) == color || board.get_cell_color(row, col) == 'w') break;
     }
+    /*
     if( first_step2(board) ){
         if(board.get_cell_color(0,0) == color || board.get_cell_color(row, col) == 'w')
             index[0] = 0, index[1] = 0; 
@@ -34,8 +51,10 @@ void algorithm_B(Board board, Player player, int index[]){
             index[0] = 4, index[1] = 0;
         else if(board.get_cell_color(4,5) == color || board.get_cell_color(row, col) == 'w')
             index[0] = 4, index[1] = 5;
-    }
-    else{
+    }*/
+
+    if( !first_step2(board) ){
+        // general solution
         int ans[2] = {-1,-1};
         for(int i = 0; i < 30; i ++){
             int r = i / 6;
@@ -51,6 +70,7 @@ void algorithm_B(Board board, Player player, int index[]){
             row = ans[0] / COL;
             col = ans[0] % COL;
         }
+
         // abprune solution
         int cur_H = abprune2(board, MaxDepth2, INT32_MIN, INT32_MAX, color);
         for(int i = 0; i < 30; i ++){
