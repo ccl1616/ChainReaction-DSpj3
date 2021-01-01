@@ -4,7 +4,7 @@
 #include "../include/algorithm.h"
 
 using namespace std;
-int MaxDepth = 3;
+int MaxDepth = 4;
 #define ROW 5
 #define COL 6
 /******************************************************

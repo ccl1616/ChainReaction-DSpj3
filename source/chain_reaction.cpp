@@ -27,7 +27,9 @@ int main(){
         //////////// Red Player operations ////////////
         auto start = chrono::high_resolution_clock::now(); 
         timearr[0] = time(NULL);
+
         algorithm_A(board, red_player, index);
+
         timearr[1] = time(NULL);
         auto stop = chrono::high_resolution_clock::now(); 
         board.place_orb(index[0], index[1], &red_player);
@@ -38,32 +40,43 @@ int main(){
         }
         double duration = (double) difftime(timearr[1],timearr[0]);
         auto duration2 = chrono::duration_cast<chrono::microseconds>(stop - start); 
-
         cout << duration2.count() << endl;
         if( duration2.count() > 1000000 ) {
             cout << "Red Player timeout xxxxxxxxxxxx" << endl;
             return 0;
         }
+
         board.print_current_board(index[0], index[1], round, duration);
         round++;
-
         if(board.win_the_game(red_player) && !first_two_step){
             cout << "Red Player won the game !!!" << endl;
             return 0;
         }
 
         //////////// Blue Player operations ////////////
+        start = chrono::high_resolution_clock::now();
         timearr[0] = time(NULL);
+
         algorithm_B(board, blue_player, index);
         // std::cin >> index[0] >> index[1];
+
         timearr[1] = time(NULL);
+        stop = chrono::high_resolution_clock::now(); 
         board.place_orb(index[0], index[1], &blue_player);
 
         if(rules_violation(blue_player)) return 0;
+
         duration = (double) difftime(timearr[0],timearr[1]);
+        duration2 = chrono::duration_cast<chrono::microseconds>(stop - start); 
+        cout << duration2.count() << endl;
+        if( duration2.count() > 1000000 ) {
+            cout << "Blue Player timeout xxxxxxxxxxxx" << endl;
+            return 0;
+        }
+
+
         board.print_current_board(index[0], index[1], round, duration);
         round++;
-
         if(board.win_the_game(blue_player) && !first_two_step){
             cout << "Blue Player won the game !!!" << endl;
             return 0;
