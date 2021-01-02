@@ -72,6 +72,7 @@ void algorithm_B(Board board, Player player, int index[]){
         }
 
         // abprune solution
+        
         int cur_H = abprune2(board, MaxDepth2, INT32_MIN, INT32_MAX, color);
         for(int i = 0; i < 30; i ++){
             if(cur_H == heuristic_val2[i] && (board.get_cell_color(i/COL, i%COL) == color || board.get_cell_color(i/COL, i%COL) == 'w')){
@@ -80,6 +81,7 @@ void algorithm_B(Board board, Player player, int index[]){
                 break;
             }
         }
+
     }
 
     index[0] = row;
