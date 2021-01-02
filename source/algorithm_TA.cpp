@@ -41,18 +41,7 @@ void algorithm_B(Board board, Player player, int index[]){
         col = rand() % 6;
         if(board.get_cell_color(row, col) == color || board.get_cell_color(row, col) == 'w') break;
     }
-    /*
-    if( first_step2(board) ){
-        if(board.get_cell_color(0,0) == color || board.get_cell_color(row, col) == 'w')
-            index[0] = 0, index[1] = 0; 
-        else if(board.get_cell_color(0,5) == color || board.get_cell_color(row, col) == 'w')
-            index[0] = 0, index[1] = 5;
-        else if(board.get_cell_color(4,0) == color || board.get_cell_color(row, col) == 'w')
-            index[0] = 4, index[1] = 0;
-        else if(board.get_cell_color(4,5) == color || board.get_cell_color(row, col) == 'w')
-            index[0] = 4, index[1] = 5;
-    }*/
-
+    
     if( !first_step2(board) ){
         // general solution
         int ans[2] = {-1,-1};
@@ -204,7 +193,11 @@ int heuristic2(Board curnode)
             }
         }
     }
-    H += (max_occupy/30)*50 , H += max_H;
-    H -= (min_occupy/30)*50 , H -= min_H;
+    if(max_occupy != 0 && min_occupy == 0)
+        H += 1000000;
+    else if(min_occupy != 0 && max_occupy == 0)
+        H -= 1000000;
+    H += max_H;
+    H -= min_H;
     return H;
 }

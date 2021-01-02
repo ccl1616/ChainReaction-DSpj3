@@ -214,8 +214,14 @@ int heuristic(Board curnode)
             }
         }
     }
-    H += (max_occupy/30)*50 , H += max_H;
-    H -= (min_occupy/30)*50 , H -= min_H;
+    // H += (max_occupy/30)*50; 
+    // H -= (min_occupy/30)*50; 
+    if(max_occupy != 0 && min_occupy == 0)
+        H += 1000000;
+    else if(min_occupy != 0 && max_occupy == 0)
+        H -= 1000000;
+    H += max_H;
+    H -= min_H;
     return H;
 }
 
