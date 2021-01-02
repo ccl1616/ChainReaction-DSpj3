@@ -186,20 +186,21 @@ int heuristic2(Board curnode)
             if(cell_color == local_player_color2){
                 max_H += curnode.get_orbs_num(r,c);
                 max_occupy++;
-
+                /*
                 if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 )
                     max_H += curnode.get_capacity(r,c)*5;
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 )
-                    max_H += curnode.get_capacity(r,c)*20;
+                    max_H += curnode.get_capacity(r,c)*50;*/
+
             }
             else {
                 min_H +=  curnode.get_orbs_num(r,c);
                 min_occupy++;
-
+                /*
                 if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 )
                     min_H += curnode.get_capacity(r,c)*5;
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 )
-                    min_H += curnode.get_capacity(r,c)*20;
+                    min_H += curnode.get_capacity(r,c)*50;*/
             }
         }
     }
