@@ -196,7 +196,7 @@ int heuristic(Board curnode)
                     max_H += curnode.get_capacity(r,c)*10;
                 }
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 ){
-                    max_H += curnode.get_capacity(r,c)*50;
+                    max_H += curnode.get_capacity(r,c)*60;
                 }
 
             }
@@ -208,18 +208,17 @@ int heuristic(Board curnode)
                     min_H += curnode.get_capacity(r,c)*10;
                 }
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 ){
-                    min_H += curnode.get_capacity(r,c)*50;
+                    min_H += curnode.get_capacity(r,c)*60;
                 }
 
             }
         }
     }
-    // H += (max_occupy/30)*50; 
-    // H -= (min_occupy/30)*50; 
     if(max_occupy != 0 && min_occupy == 0)
         H += 1000000;
     else if(min_occupy != 0 && max_occupy == 0)
         H -= 1000000;
+    H += ((max_occupy-min_occupy)/30) *2;
     H += max_H;
     H -= min_H;
     return H;
