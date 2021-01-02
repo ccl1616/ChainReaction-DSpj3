@@ -193,20 +193,10 @@ int heuristic(Board curnode)
                 max_occupy++;
                 
                 if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 ){
-                    max_H += abs(curnode.get_orbs_num(r,c))*5;
-                    if(curnode.get_capacity(r,c) == 8)
-                        max_H += 8*5;
-                    else if(curnode.get_capacity(r,c) == 5)
-                        max_H += 5*5;
-                    else max_H += 3*5;
+                    max_H += curnode.get_capacity(r,c)*10;
                 }
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 ){
-                    max_H += abs(curnode.get_orbs_num(r,c))*20;
-                    if(curnode.get_capacity(r,c) == 8)
-                        max_H += 8*20;
-                    else if(curnode.get_capacity(r,c) == 5)
-                        max_H += 5*20;
-                    else max_H += 3*20;
+                    max_H += curnode.get_capacity(r,c)*50;
                 }
 
             }
@@ -215,20 +205,10 @@ int heuristic(Board curnode)
                 min_occupy++;
                 
                 if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 ){
-                    min_H += abs(curnode.get_orbs_num(r,c))*5;
-                    if(curnode.get_capacity(r,c) == 8)
-                        min_H += 8*5;
-                    else if(curnode.get_capacity(r,c) == 5)
-                        min_H += 5*5;
-                    else min_H += 3*5;
+                    min_H += curnode.get_capacity(r,c)*10;
                 }
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 ){
-                    min_H += abs(curnode.get_orbs_num(r,c))*20;
-                    if(curnode.get_capacity(r,c) == 8)
-                        min_H += 8*20;
-                    else if(curnode.get_capacity(r,c) == 5)
-                        min_H += 5*20;
-                    else min_H += 3*20;
+                    min_H += curnode.get_capacity(r,c)*50;
                 }
 
             }
