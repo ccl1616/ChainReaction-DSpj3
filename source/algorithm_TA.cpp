@@ -61,7 +61,6 @@ void algorithm_B(Board board, Player player, int index[]){
         }
 
         // abprune solution
-        
         int cur_H = abprune2(board, MaxDepth2, INT32_MIN, INT32_MAX, color);
         for(int i = 0; i < 30; i ++){
             if(cur_H == heuristic_val2[i] && (board.get_cell_color(i/COL, i%COL) == color || board.get_cell_color(i/COL, i%COL) == 'w')){
@@ -177,7 +176,7 @@ int heuristic2(Board curnode)
                 max_occupy++;
                 /*
                 if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 )
-                    max_H += curnode.get_capacity(r,c)*5;
+                    max_H += curnode.get_capacity(r,c)*10;
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 )
                     max_H += curnode.get_capacity(r,c)*50;*/
 
@@ -187,7 +186,7 @@ int heuristic2(Board curnode)
                 min_occupy++;
                 /*
                 if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 )
-                    min_H += curnode.get_capacity(r,c)*5;
+                    min_H += curnode.get_capacity(r,c)*10;
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 )
                     min_H += curnode.get_capacity(r,c)*50;*/
             }
@@ -197,6 +196,7 @@ int heuristic2(Board curnode)
         H += 1000000;
     else if(min_occupy != 0 && max_occupy == 0)
         H -= 1000000;
+    // H += ((max_occupy-min_occupy)/30) *2;
     H += max_H;
     H -= min_H;
     return H;

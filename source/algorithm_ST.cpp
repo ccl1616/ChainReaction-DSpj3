@@ -58,31 +58,30 @@ void algorithm_A(Board board, Player player, int index[]){
     }
 
     // algo
-    Board myboard = board;
-    if(!first_step(myboard) ){
+    if(!first_step(board) ){
         ans[0] = ans[1] = -1;
         
         // general solution, no further think
         for(int i = 0; i < 30; i ++){
             int r = i / 6;
             int c = i % 6;
-            if(myboard.get_cell_color(r,c) == color){
+            if(board.get_cell_color(r,c) == color){
                 // cout << myboard.get_orbs_num(r,c) << " at " << r << "," << c << endl;
-                if(myboard.get_orbs_num(r,c) > ans[1] ){
-                    ans[1] = myboard.get_orbs_num(r,c);
+                if(board.get_orbs_num(r,c) > ans[1] ){
+                    ans[1] = board.get_orbs_num(r,c);
                     ans[0] = i;
                 }
             }
         }
-        if(ans[0] != -1 && (myboard.get_cell_color(ans[0]/COL, ans[0]%COL) == color || myboard.get_cell_color(ans[0]/COL, ans[0]%COL) == 'w') ) {
+        if(ans[0] != -1 && (board.get_cell_color(ans[0]/COL, ans[0]%COL) == color || board.get_cell_color(ans[0]/COL, ans[0]%COL) == 'w') ) {
             row = ans[0] / COL;
             col = ans[0] % COL;
         }
         
         // abprune solution
-        int cur_H = abprune(myboard, MaxDepth, INT32_MIN, INT32_MAX, color);
+        int cur_H = abprune(board, MaxDepth, INT32_MIN, INT32_MAX, color);
         for(int i = 0; i < 30; i ++){
-            if(cur_H == heuristic_val[i] && (myboard.get_cell_color(i/COL, i%COL) == color || myboard.get_cell_color(i/COL, i%COL) == 'w')){
+            if(cur_H == heuristic_val[i] && (board.get_cell_color(i/COL, i%COL) == color || board.get_cell_color(i/COL, i%COL) == 'w')){
                 row = i / COL;
                 col = i % COL;
                 checker = true;
@@ -93,7 +92,6 @@ void algorithm_A(Board board, Player player, int index[]){
     
     index[0] = row;
     index[1] = col;
-    std::cout << check_board(myboard,board) << " prune:" << checker << endl;
 }
 
 bool check_board(Board my, Board ori)
@@ -117,7 +115,7 @@ int get_next_player(int color){
 }
 
 int abprune(Board curnode, int depth, int alpha, int beta, int color){
-    //cout << "hi abprune\n";
+    
     bool maximizer = (color == local_player_color );
     
     if(depth == 0 || curnode.win_the_game( Player(color) )){
@@ -196,7 +194,7 @@ int heuristic(Board curnode)
                     max_H += curnode.get_capacity(r,c)*10;
                 }
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 ){
-                    max_H += curnode.get_capacity(r,c)*60;
+                    max_H += curnode.get_capacity(r,c)*50;
                 }
 
             }
@@ -208,7 +206,7 @@ int heuristic(Board curnode)
                     min_H += curnode.get_capacity(r,c)*10;
                 }
                 else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 ){
-                    min_H += curnode.get_capacity(r,c)*60;
+                    min_H += curnode.get_capacity(r,c)*50;
                 }
 
             }
@@ -218,7 +216,7 @@ int heuristic(Board curnode)
         H += 1000000;
     else if(min_occupy != 0 && max_occupy == 0)
         H -= 1000000;
-    H += ((max_occupy-min_occupy)/30) *2;
+    // H += ((max_occupy-min_occupy)/30) *2;
     H += max_H;
     H -= min_H;
     return H;
