@@ -4,9 +4,7 @@
 #include "../include/algorithm.h"
 
 using namespace std;
-int MaxDepth = 4;
-#define ROW 5
-#define COL 6
+
 /******************************************************
  * In your algorithm, you can just use the the funcitons
  * listed by TA to get the board information.(functions 
@@ -27,6 +25,9 @@ int MaxDepth = 4;
  * 4. The function that print out the current board statement
 *************************************************************************/
 
+int MaxDepth = 4;
+#define ROW 5
+#define COL 6
 int ans[4]; //[0] = max id, [1] = max val; [2] = second id, [3] = second maxval
 bool checker = false;
 int heuristic_val[30]; // save heuristic value
@@ -139,11 +140,7 @@ int abprune(Board curnode, int depth, int alpha, int beta, int color){
             if(!next_valid_steps[i]) continue;
             Board next = curnode;
             Player temp(color);
-            if(!next.place_orb( i/6, i%6, &temp) ){
-                cout << "illegal\n";
-                continue;
-            }
-            else{
+            if(next.place_orb( i/6, i%6, &temp) ){
                 int eval = abprune( next,depth-1,alpha,beta, get_next_player(color)); 
                 maxeval = max(maxeval,eval);
                 if(depth == MaxDepth)
@@ -162,11 +159,7 @@ int abprune(Board curnode, int depth, int alpha, int beta, int color){
             if(!next_valid_steps[i]) continue;
             Board next = curnode;
             Player temp(color);
-            if(!next.place_orb(i/6, i%6, &temp) ){
-                cout << "illegal\n";
-                continue;
-            }
-            else{
+            if(next.place_orb( i/6, i%6, &temp) ){
                 int eval = abprune( next,depth-1,alpha,beta, get_next_player(color)); 
                 mineval = min(mineval,eval);
                 if(depth == MaxDepth)
@@ -199,20 +192,44 @@ int heuristic(Board curnode)
                 max_H += curnode.get_orbs_num(r,c);
                 max_occupy++;
                 
-                if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 )
+                if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 ){
                     max_H += abs(curnode.get_orbs_num(r,c))*5;
-                else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 )
+                    if(curnode.get_capacity(r,c) == 8)
+                        max_H += 8*5;
+                    else if(curnode.get_capacity(r,c) == 5)
+                        max_H += 5*5;
+                    else max_H += 3*5;
+                }
+                else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 ){
                     max_H += abs(curnode.get_orbs_num(r,c))*20;
+                    if(curnode.get_capacity(r,c) == 8)
+                        max_H += 8*20;
+                    else if(curnode.get_capacity(r,c) == 5)
+                        max_H += 5*20;
+                    else max_H += 3*20;
+                }
 
             }
             else {
                 min_H +=  curnode.get_orbs_num(r,c);
                 min_occupy++;
                 
-                if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 )
+                if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 2 ){
                     min_H += abs(curnode.get_orbs_num(r,c))*5;
-                else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 )
+                    if(curnode.get_capacity(r,c) == 8)
+                        min_H += 8*5;
+                    else if(curnode.get_capacity(r,c) == 5)
+                        min_H += 5*5;
+                    else min_H += 3*5;
+                }
+                else if( abs(curnode.get_orbs_num(r,c) - curnode.get_capacity(r,c)) == 1 ){
                     min_H += abs(curnode.get_orbs_num(r,c))*20;
+                    if(curnode.get_capacity(r,c) == 8)
+                        min_H += 8*20;
+                    else if(curnode.get_capacity(r,c) == 5)
+                        min_H += 5*20;
+                    else min_H += 3*20;
+                }
 
             }
         }
