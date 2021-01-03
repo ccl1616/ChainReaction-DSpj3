@@ -24,17 +24,13 @@ using namespace std;
  * 3. The function that return the color of the cell(row, col)
  * 4. The function that print out the current board statement
 *************************************************************************/
-
 int MaxDepth = 4;
 #define ROW 5
 #define COL 6
-
 int heuristic_val[30]; // save heuristic value
 int local_player_color;
 
-bool check_board(Board my, Board ori); // check the wheather the board is identical or not
 bool low_height(Board curnode); // height < 2
-
 int abprune(Board curnode, int depth, int alpha, int beta, int color);
 int get_next_player(int color);
 int heuristic(Board curnode);
@@ -55,7 +51,7 @@ void algorithm_A(Board board, Player player, int index[]){
     }
 
     // algo
-    int ans[2]; //[0] = max id, [1] = max val; [2] = second id, [3] = second maxval
+    int ans[2]; //[0] = max id, [1] = max val;
     if(!low_height(board) ){
         ans[0] = ans[1] = -1;
         
@@ -75,6 +71,8 @@ void algorithm_A(Board board, Player player, int index[]){
             row = ans[0] / COL;
             col = ans[0] % COL;
         }
+        index[0] = row;
+        index[1] = col;
         
         // abprune solution
         int cur_H = abprune(board, MaxDepth, INT32_MIN, INT32_MAX, color);
@@ -100,21 +98,6 @@ void algorithm_A(Board board, Player player, int index[]){
     
     index[0] = row;
     index[1] = col;
-}
-
-bool check_board(Board my, Board ori)
-{
-    bool ans = true;
-    for(int i = 0; i < 5; i ++){
-        for(int j = 0; j < 6; j ++){
-            if( !(my.get_orbs_num(i,j) == ori.get_orbs_num(i,j)) ) ans = false; 
-            else if( !(my.get_capacity(i,j) == ori.get_capacity(i,j)) ) ans = false;
-            else if( !(my.get_cell_color(i,j) == ori.get_cell_color(i,j)) ) ans = false;
-
-            if(!ans) return false;
-        }
-    }
-    return true;
 }
 
 int get_next_player(int color){
