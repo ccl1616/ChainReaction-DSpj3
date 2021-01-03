@@ -28,14 +28,12 @@ using namespace std;
 int MaxDepth = 4;
 #define ROW 5
 #define COL 6
-int ans[4]; //[0] = max id, [1] = max val; [2] = second id, [3] = second maxval
-bool checker = false;
+
 int heuristic_val[30]; // save heuristic value
 int local_player_color;
-Board original;
 
 bool check_board(Board my, Board ori); // check the wheather the board is identical or not
-bool first_step(Board curnode);
+bool low_height(Board curnode); // height < 2
 
 int abprune(Board curnode, int depth, int alpha, int beta, int color);
 int get_next_player(int color);
@@ -48,7 +46,6 @@ void algorithm_A(Board board, Player player, int index[]){
     int row, col;
     int color = player.get_color();
     local_player_color = color;
-    original = board;
     
     // random
     while(1){
@@ -58,7 +55,8 @@ void algorithm_A(Board board, Player player, int index[]){
     }
 
     // algo
-    if(!first_step(board) ){
+    int ans[2]; //[0] = max id, [1] = max val; [2] = second id, [3] = second maxval
+    if(!low_height(board) ){
         ans[0] = ans[1] = -1;
         
         // general solution, no further think
@@ -81,13 +79,25 @@ void algorithm_A(Board board, Player player, int index[]){
         // abprune solution
         int cur_H = abprune(board, MaxDepth, INT32_MIN, INT32_MAX, color);
         for(int i = 0; i < 30; i ++){
-            if(cur_H == heuristic_val[i] && (board.get_cell_color(i/COL, i%COL) == color || board.get_cell_color(i/COL, i%COL) == 'w')){
+            if(cur_H == heuristic_val[i] && ( board.get_cell_color(i/COL, i%COL) == color || board.get_cell_color(i/COL, i%COL) == 'w' )){
                 row = i / COL;
                 col = i % COL;
-                checker = true;
                 break;
             }
         }
+    }
+    else{
+        for(int i = 0; i < 30; i ++){
+            int r = i / 6;
+            int c = i % 6;
+            if(board.get_cell_color(r,c) == 'w'){
+                ans[1] = board.get_orbs_num(r,c);
+                ans[0] = i;
+                break;
+            }
+        }
+        row = ans[0] / COL;
+        col = ans[0] % COL;
     }
     
     index[0] = row;
@@ -222,12 +232,11 @@ int heuristic(Board curnode)
     return H;
 }
 
-bool first_step(Board curnode){
+bool low_height(Board curnode){
     for(int i = 0; i < 30; i ++){
         int r = i / 6;
         int c = i % 6;
-        int cell_color = curnode.get_cell_color(r,c);
-        if(cell_color != 'w') return false;
+        if(curnode.get_orbs_num(r,c) >= 2 ) return false;
     }
     return true;
 }
