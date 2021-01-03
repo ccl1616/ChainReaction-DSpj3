@@ -28,7 +28,7 @@ int main(){
         auto start = chrono::high_resolution_clock::now(); 
         timearr[0] = time(NULL);
 
-        algorithm_B(board, red_player, index); // **********************************
+        algorithm_A(board, red_player, index); // **********************************
 
         timearr[1] = time(NULL);
         auto stop = chrono::high_resolution_clock::now(); 
@@ -57,7 +57,7 @@ int main(){
         start = chrono::high_resolution_clock::now();
         timearr[0] = time(NULL);
 
-        algorithm_A(board, blue_player, index); // **********************************
+        algorithm_B(board, blue_player, index); // **********************************
         // std::cin >> index[0] >> index[1];
 
         timearr[1] = time(NULL);

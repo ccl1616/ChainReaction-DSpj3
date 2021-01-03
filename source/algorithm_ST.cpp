@@ -46,7 +46,7 @@ void algorithm_A(Board board, Player player, int index[]){
     int row, col;
     int color = player.get_color();
     local_player_color = color;
-    
+
     // random
     while(1){
         row = rand() % ROW;
@@ -91,13 +91,11 @@ void algorithm_A(Board board, Player player, int index[]){
             int r = i / 6;
             int c = i % 6;
             if(board.get_cell_color(r,c) == 'w'){
-                ans[1] = board.get_orbs_num(r,c);
-                ans[0] = i;
+                row = i / COL;
+                col = i % COL;
                 break;
             }
         }
-        row = ans[0] / COL;
-        col = ans[0] % COL;
     }
     
     index[0] = row;
@@ -236,7 +234,10 @@ bool low_height(Board curnode){
     for(int i = 0; i < 30; i ++){
         int r = i / 6;
         int c = i % 6;
-        if(curnode.get_orbs_num(r,c) >= 2 ) return false;
+        if(curnode.get_cell_color(r,c) != 'w') {
+            if(curnode.get_orbs_num(r,c) >= 2 ) 
+                return false;
+        }
     }
     return true;
 }
